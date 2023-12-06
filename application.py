@@ -144,14 +144,20 @@ class Application:
 
     def genGroceryOptionPage(self, groceryName: str, groceryID: str):
         page = Page(title=groceryName, id="option" + groceryID)
+
+        # Find next in turn to purchase the grocery
+        # If everyone has purchased X times, then the last one to have purchased will display
+        # If no one has purchased give first result
         results = self.fetchResultFromDB(
             "SELECT count(*) as x, Users.name "
             "FROM PurchaseHistory "
             "JOIN Users on PurchaseHistory.userID = Users.userID "
             "WHERE PurchaseHistory.groceryID = %s "
             "GROUP BY PurchaseHistory.userID "
-            "ORDER BY PurchaseHistory.purchaseDate",
+            "ORDER BY x, PurchaseHistory.purchaseDate",
             groceryID)
+
+        print(results)
 
         if len(results) != 0:
             even = False
