@@ -125,8 +125,8 @@ class Application:
         results = self.fetchResultFromDB(
             "SELECT Users.name, Users.userID, Groceries.groceryID "
             "FROM Sharing "
-            "JOIN Users on sharing.userID = users.userID "
-            "JOIN Groceries on sharing.groceryID = groceries.groceryID "
+            "JOIN Users on Sharing.userID = Users.userID "
+            "JOIN Groceries on Sharing.groceryID = Groceries.groceryID "
             "WHERE Groceries.groceryID = %s",
             groceryID
         )
@@ -145,12 +145,12 @@ class Application:
     def genGroceryOptionPage(self, groceryName: str, groceryID: str):
         page = Page(title=groceryName, id="option" + groceryID)
         results = self.fetchResultFromDB(
-            "SELECT count(*) as x, users.name "
-            "FROM purchasehistory "
-            "JOIN Users on purchasehistory.userID = users.userID "
-            "WHERE purchasehistory.groceryID = %s "
-            "GROUP BY purchasehistory.userID "
-            "ORDER BY purchasehistory.purchaseDate",
+            "SELECT count(*) as x, Users.name "
+            "FROM PurchaseHistory "
+            "JOIN Users on PurchaseHistory.userID = Users.userID "
+            "WHERE PurchaseHistory.groceryID = %s "
+            "GROUP BY PurchaseHistory.userID "
+            "ORDER BY PurchaseHistory.purchaseDate",
             groceryID)
 
         if len(results) != 0:
