@@ -53,3 +53,6 @@ INSERT INTO `users` (`userID`, `name`) VALUES
 (3, 'Lex'),
 (4, 'Matt'),
 (5, 'Archie');
+
+CREATE user IF NOT EXISTS dbadmin@localhost;
+GRANT all privileges on sharing.* to dbadmin@localhost;
