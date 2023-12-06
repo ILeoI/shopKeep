@@ -123,11 +123,11 @@ class Application:
         page = Page(title=groceryName, id="add" + groceryID)
 
         results = self.fetchResultFromDB(
-            "SELECT users.name, users.userID, groceries.groceryID "
-            "FROM `sharing` "
+            "SELECT Users.name, Users.userID, Groceries.groceryID "
+            "FROM Sharing "
             "JOIN Users on sharing.userID = users.userID "
-            "JOIN groceries on sharing.groceryID = groceries.groceryID "
-            "WHERE groceries.groceryID = %s",
+            "JOIN Groceries on sharing.groceryID = groceries.groceryID "
+            "WHERE Groceries.groceryID = %s",
             groceryID
         )
 
@@ -146,7 +146,7 @@ class Application:
         page = Page(title=groceryName, id="option" + groceryID)
         results = self.fetchResultFromDB(
             "SELECT count(*) as x, users.name "
-            "FROM `purchasehistory` "
+            "FROM purchasehistory "
             "JOIN Users on purchasehistory.userID = users.userID "
             "WHERE purchasehistory.groceryID = %s "
             "GROUP BY purchasehistory.userID "
