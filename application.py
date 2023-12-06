@@ -67,6 +67,8 @@ class Application:
                                 userID, groceryID
                                 )
                 self.regenGroceryHistoryPage(str(groceryID))
+                self.regenGroceryOptionPage(str(groceryID))
+
                 self.back()
 
     def regenGroceryHistoryPage(self, groceryID: str):
@@ -108,8 +110,7 @@ class Application:
             "JOIN Users on PurchaseHistory.userID = Users.userID "
             "JOIN Groceries on PurchaseHistory.groceryID = Groceries.groceryID "
             "WHERE Groceries.groceryID = %s "
-            "ORDER BY purchaseDate DESC "
-            "LIMIT 5",
+            "ORDER BY purchaseDate DESC ",
             gID
         )
 
@@ -142,46 +143,28 @@ class Application:
 
         self.pages.append(page)
 
+    def regenGroceryOptionPage(self, groceryID: str):
+        optionPage = None
+
+        for page in self.pages:
+            if page.id == "option" + groceryID:
+                optionPage = page
+
+        if optionPage is None:
+            print("option" + groceryID + " is none")
+            return
+
+        optionPage.elements.clear()
+
+        optionPage.addElement(ListElement("Next Buyer: " + self.findNextBuyer(groceryID)))
+
+        optionPage.addElement(ListElement("Add", selectable=True, dataType="link", data="add" + groceryID))
+        optionPage.addElement(ListElement("History", selectable=True, dataType="link", data="history" + groceryID))
+
     def genGroceryOptionPage(self, groceryName: str, groceryID: str):
         page = Page(title=groceryName, id="option" + groceryID)
 
-        # Find next in turn to purchase the grocery
-        # If everyone has purchased X times, then the last one to have purchased will display
-        # If no one has purchased give first result
-        results = self.fetchResultFromDB(
-            "SELECT count(*) as x, Users.name "
-            "FROM PurchaseHistory "
-            "JOIN Users on PurchaseHistory.userID = Users.userID "
-            "WHERE PurchaseHistory.groceryID = %s "
-            "GROUP BY PurchaseHistory.userID "
-            "ORDER BY x, PurchaseHistory.purchaseDate",
-            groceryID)
-
-        print(results)
-
-        if len(results) != 0:
-            even = False
-            minX = 0
-            minIndex = -1
-
-            for i in range(0, len(results)):
-                if minIndex == -1:
-                    minIndex = i
-                    minX = results[i]["x"]
-
-                if results[i]["x"] < minX:
-                    minIndex = i
-                    minX = results[i]["x"]
-
-                if results[i]["x"] == minX:
-                    even = True
-                else:
-                    even = False
-
-            if even:
-                page.addElement(ListElement("Next Buyer: " + results[0]["name"]))
-            else:
-                page.addElement(ListElement("Next Buyer: " + results[minIndex]["name"]))
+        page.addElement(ListElement("Next Buyer: " + self.findNextBuyer(groceryID)))
 
         page.addElement(ListElement("Add", selectable=True, dataType="link", data="add" + groceryID))
         page.addElement(ListElement("History", selectable=True, dataType="link", data="history" + groceryID))
@@ -206,6 +189,24 @@ class Application:
             groceryPage.addElement(
                 ListElement(displayText=groceryName, selectable=True, dataType="link", data="option" + groceryID)
             )
+
+    def findNextBuyer(self, groceryID: str):
+        results = self.fetchResultFromDB(
+            "SELECT Users.name, COUNT(PurchaseHistory.groceryID) AS purchaseCount, "
+            "   MAX(PurchaseHistory.purchaseDate) as lastPurchaseDate "
+            "FROM Sharing "
+            "LEFT JOIN PurchaseHistory ON Sharing.userID = PurchaseHistory.userID "
+            "   AND PurchaseHistory.groceryID = Sharing.groceryID "
+            "JOIN Users on Sharing.userID = Users.userID "
+            "WHERE Sharing.groceryID = %s "
+            "GROUP BY Sharing.userID, Sharing.groceryID;",
+            groceryID)
+
+        next_buyer = min(results, key=lambda x: (x['purchaseCount'], x['lastPurchaseDate']))
+
+        return next_buyer["name"]
+
+
 
     def printState(self):
         print("currentPageIndex: " + str(self.currentPageIndex))
