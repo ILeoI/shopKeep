@@ -39,10 +39,8 @@ if __name__ == '__main__':
 
         if text is not None:
             for i in range(0, len(text)):
-                print(s)
-		display.lcd_display_string(text[i], i+1)
-
-
+                print(text[i])
+                display.lcd_display_string(text[i], i+1)
 
         i = input("Input: ")
 
