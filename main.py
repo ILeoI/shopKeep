@@ -4,13 +4,11 @@ import sys
 from application import Application
 
 WINDOWS = False
-CONSOLE_MODE = False
+CONSOLE_MODE = True
 
 if sys.argv.count("gpio") > 0:
     print("gpio input")
     CONSOLE_MODE = False
-
-print(CONSOLE_MODE)
 
 if platform.system() == "Windows" or WINDOWS:
     WINDOWS = True
