@@ -6,6 +6,7 @@ from application import Application
 WINDOWS = False
 
 if sys.argv.count("win") > 0:
+    print("dummying windows")
     WINDOWS = True
 
 if platform.system() == "Windows" or WINDOWS:
