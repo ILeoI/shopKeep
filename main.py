@@ -33,6 +33,7 @@ if __name__ == '__main__':
         print()
 
         print(app.getCurrentPage().title)
+        display.lcd_display_string(app.getCurrentPage().title, 1)
 
         text = app.getCurrentPage().getTextToDisplay()
 
