@@ -4,10 +4,11 @@ import sys
 from application import Application
 
 WINDOWS = False
+CONSOLE_MODE = False
 
-if sys.argv.count("win") > 0:
-    print("dummying windows")
-    WINDOWS = True
+if sys.argv.count("gpio") > 0:
+    print("gpio input")
+    CONSOLE_MODE = False
 
 if platform.system() == "Windows" or WINDOWS:
     WINDOWS = True
@@ -22,8 +23,9 @@ GPIO.setmode(GPIO.BOARD)
 
 button_pins = [17, 18, 22, 23]
 
-for pin in button_pins:
-    GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+if not CONSOLE_MODE:
+    for pin in button_pins:
+       GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 if __name__ == '__main__':
     app = Application()
@@ -54,7 +56,7 @@ if __name__ == '__main__':
                 print(text[i])
                 display.lcd_display_string(text[i], i+2)
 
-        if WINDOWS:
+        if CONSOLE_MODE:
             i = input("Input: ")
 
             if i == "X":
