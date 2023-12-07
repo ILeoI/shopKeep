@@ -1,7 +1,12 @@
 BOARD = 0
+BCM = 0
+
 IN = 0
+OUT = 0
+
 PUD_UP = 0
 PUD_DOWN = 0
+
 RISING = 0
 FALLING = 0
 

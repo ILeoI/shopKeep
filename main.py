@@ -10,6 +10,8 @@ if sys.argv.count("gpio") > 0:
     print("gpio input")
     CONSOLE_MODE = False
 
+print(CONSOLE_MODE)
+
 if platform.system() == "Windows" or WINDOWS:
     WINDOWS = True
     import drivers_win as drivers
@@ -19,7 +21,7 @@ else:
     import RPi.GPIO as GPIO
 
 
-GPIO.setmode(GPIO.BOARD)
+GPIO.setmode(GPIO.BCM)
 
 button_pins = [17, 18, 22, 23]
 
@@ -76,3 +78,5 @@ if __name__ == '__main__':
                 pressed_button = button_pins.index(channel)
             except KeyboardInterrupt:
                 pass
+
+        display.lcd_clear()
