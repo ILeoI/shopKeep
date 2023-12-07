@@ -38,8 +38,11 @@ if __name__ == '__main__':
         text = app.getCurrentPage().getTextToDisplay()
 
         if text is not None:
-            for s in text:
+            for i in range(0, len(text)):
                 print(s)
+		display.lcd_display_string(text[i], i+1)
+
+
 
         i = input("Input: ")
 
