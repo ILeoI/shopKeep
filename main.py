@@ -40,11 +40,12 @@ if __name__ == '__main__':
         if text is not None:
             for i in range(0, len(text)):
                 print(text[i])
-                display.lcd_display_string(text[i], i+1)
+                display.lcd_display_string(text[i], i+2)
 
         i = input("Input: ")
 
         if i == "X":
+            display.lcd_clear()
             break
         elif i == "S":
             app.select()
