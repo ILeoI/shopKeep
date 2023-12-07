@@ -15,7 +15,7 @@ if __name__ == '__main__':
     while 1:
         try:
             display.lcd_display_string("Tom Stinks", (i % 4) + 1)
-            time.sleep(0.1)
+            time.sleep(0.5)
             display.lcd_clear()
             i += 1
         except KeyboardInterrupt:
