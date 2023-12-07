@@ -1,5 +1,5 @@
 from smbus import SMBus
-from RPiGPIO.GPIO import RPI_REVISION
+from RPi.GPIO import RPI_REVISION
 from time import sleep
 from re import findall, match
 from subprocess import check_output
