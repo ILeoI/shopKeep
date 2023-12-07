@@ -9,12 +9,13 @@ else:
 if __name__ == '__main__':
     display = drivers.Lcd()
 
+    i = 0
+
     while 1:
         try:
-            display.lcd_display_string("Tom Stinks", 1)
-            display.lcd_display_string("Tom Stinks", 2)
-            display.lcd_display_string("Tom Stinks", 3)
-            display.lcd_display_string("Tom Stinks", 4)
+            display.lcd_display_string("Tom Stinks", i % 4)
+            display.lcd_clear()
+            i += 1
         except KeyboardInterrupt:
             display.lcd_clear()
             break
