@@ -4,7 +4,7 @@ import sys
 from application import Application
 
 WINDOWS = False
-CONSOLE_MODE = False
+CONSOLE_MODE = True
 
 if sys.argv.count("gpio") > 0:
     print("gpio input")
@@ -76,3 +76,5 @@ if __name__ == '__main__':
                 pressed_button = button_pins.index(channel)
             except KeyboardInterrupt:
                 pass
+        
+        display.lcd_clear()
