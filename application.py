@@ -206,8 +206,6 @@ class Application:
 
         return next_buyer["name"]
 
-
-
     def printState(self):
         print("currentPageIndex: " + str(self.currentPageIndex))
         print("prevPages: " + str(self.previousPages))
