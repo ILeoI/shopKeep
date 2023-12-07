@@ -1,11 +1,11 @@
 from smbus import SMBus
-from RPi.GPIO import RPI_REVISION
+from RPiGPIO.GPIO import RPI_REVISION
 from time import sleep
 from re import findall, match
 from subprocess import check_output
 from os.path import exists
 
-# old and new versions of the RPi have swapped the two i2c buses
+# old and new versions of the RPiGPIO have swapped the two i2c buses
 # they can be identified by RPI_REVISION (or check sysfs)
 BUS_NUMBER = 0 if RPI_REVISION == 1 else 1
 
