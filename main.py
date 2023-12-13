@@ -1,6 +1,8 @@
 import platform
 import sys
+import time
 
+from gpiozero import Button
 from application import Application
 
 WINDOWS = False
@@ -13,19 +15,16 @@ if sys.argv.count("gpio") > 0:
 if platform.system() == "Windows" or WINDOWS:
     WINDOWS = True
     import drivers_win as drivers
-    import RPiGPIO as GPIO
 else:
     import drivers_rpi as drivers
-    import RPi.GPIO as GPIO
 
 
-GPIO.setmode(GPIO.BCM)
+SELECT_BUTTON = 24
+BACK_BUTTON = 25
+DOWN_BUTTON = 23
 
-button_pins = [17, 18, 22, 23]
-
-if not CONSOLE_MODE:
-    for pin in button_pins:
-       GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+displayTitle = None
+displayText = None
 
 if __name__ == '__main__':
     app = Application()
@@ -34,27 +33,31 @@ if __name__ == '__main__':
 
     display = drivers.Lcd()
 
+
+    if not CONSOLE_MODE:
+        selectButton = Button(SELECT_BUTTON)
+        selectButton.when_released = app.select
+
+        backButton = Button(BACK_BUTTON)
+        backButton.when_released = app.back
+
+        downButton = Button(DOWN_BUTTON)
+        downButton.when_released = app.moveDown
+
     while 1:
-        print()
-        print()
-        print()
-        print()
-        print()
-        print()
-        print()
-
         # app.printState()
-        print()
+        time.sleep(0.001)
+        if app.shouldUpdate:
+            app.shouldUpdate = False
+            display.lcd_clear()
 
-        print(app.getCurrentPage().title)
-        display.lcd_display_string(app.getCurrentPage().title, 1)
+            display.lcd_display_string(app.getCurrentPage().title, 1)
 
-        text = app.getCurrentPage().getTextToDisplay()
+            text = app.getCurrentPage().getTextToDisplay()
 
-        if text is not None:
-            for i in range(0, len(text)):
-                print(text[i])
-                display.lcd_display_string(text[i], i+2)
+            if text is not None:
+                for i in range(0, len(text)):
+                    display.lcd_display_string(text[i], i+2)
 
         if CONSOLE_MODE:
             i = input("Input: ")
@@ -70,11 +73,3 @@ if __name__ == '__main__':
                 app.moveCursor(0)
             elif i == "1":
                 app.moveCursor(1)
-        else:
-            try:
-                channel = GPIO.wait_for_edge(button_pins, GPIO.RISING)
-                pressed_button = button_pins.index(channel)
-            except KeyboardInterrupt:
-                pass
-
-        display.lcd_clear()

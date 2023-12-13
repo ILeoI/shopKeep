@@ -18,6 +18,7 @@ class Application:
         self.pages: List[Page] = []
         self.previousPages: List[int] = []
         self.currentPageIndex = 0
+        self.shouldUpdate = True
 
     def fetchResultFromDB(self, sql: str, *args):
         for arg in args:
@@ -44,10 +45,20 @@ class Application:
 
     def moveCursor(self, direction):
         self.getCurrentPage().moveCursor(direction)
+        self.shouldUpdate = True
+
+    def moveDown(self):
+        self.moveCursor(1)
+        self.shouldUpdate = True
+
+    def moveUp(self):
+        self.moveCursor(0)
+        self.shouldUpdate = True
 
     def back(self):
         if len(self.previousPages) > 0:
             self.currentPageIndex = self.previousPages.pop()
+            self.shouldUpdate = True
 
     def select(self):
         currentListElement = self.getCurrentPage().getCurrentListElement()
@@ -70,6 +81,7 @@ class Application:
                 self.regenGroceryOptionPage(str(groceryID))
 
                 self.back()
+        self.shouldUpdate = True
 
     def regenGroceryHistoryPage(self, groceryID: str):
         historyPage = None
