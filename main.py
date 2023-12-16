@@ -7,10 +7,15 @@ from application import Application
 
 WINDOWS = False
 CONSOLE_MODE = True
+LOG = False
 
 if sys.argv.count("gpio") > 0:
     print("gpio input")
     CONSOLE_MODE = False
+
+if sys.argv.count("log") > 0:
+    print("logging")
+    LOG = True
 
 if platform.system() == "Windows":
     WINDOWS = True
@@ -52,12 +57,19 @@ if __name__ == '__main__':
                 display.lcd_clear()
 
                 display.lcd_display_string(app.getCurrentPage().title, 1)
+                if LOG:
+                    print(app.getCurrentPage().title)
 
                 text = app.getCurrentPage().getTextToDisplay()
 
                 if text is not None:
                     for i in range(0, len(text)):
                         display.lcd_display_string(text[i], i+2)
+                        if LOG:
+                            print(text[i])
+
+                if LOG:
+                    print()
 
             if CONSOLE_MODE:
                 i = input("Input: ")
