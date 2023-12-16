@@ -23,9 +23,6 @@ BACK_BUTTON = 25
 DOWN_BUTTON = 23
 UP_BUTTON = 18
 
-displayTitle = None
-displayText = None
-
 if __name__ == '__main__':
     app = Application()
 
