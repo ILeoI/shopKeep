@@ -42,7 +42,6 @@ if __name__ == '__main__':
         deltaTime = (currentTime - lastTime)
 
         app.update(deltaTime)
-        app.printState()
 
         try:
             if CONSOLE_MODE:
