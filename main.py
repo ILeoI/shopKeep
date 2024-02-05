@@ -48,8 +48,15 @@ if __name__ == '__main__':
         upButton = Button(UP_BUTTON)
         upButton.when_released = app.moveUp
 
+    lastTime = time.time()
+
     while 1:
         # app.printState()
+        currentTime = time.time()
+        deltaTime = (currentTime - lastTime)
+
+        print(deltaTime)
+
         try:
             time.sleep(0.001)
             if app.shouldUpdate:
@@ -90,3 +97,5 @@ if __name__ == '__main__':
             print("stopped")
             display.lcd_clear()
             break
+
+        lastTime = currentTime

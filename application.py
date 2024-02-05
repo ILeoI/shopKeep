@@ -5,6 +5,7 @@ import pymysql.cursors
 from page import Page
 from list_element import ListElement
 
+TIME_STILL_SLEEP = 30
 
 class Application:
     def __init__(self):
@@ -19,6 +20,8 @@ class Application:
         self.previousPages: List[int] = []
         self.currentPageIndex = 0
         self.shouldUpdate = True
+        self.awake = True
+        self.timeTillSleep = TIME_STILL_SLEEP
 
     def fetchResultFromDB(self, sql: str, *args):
         for arg in args:
