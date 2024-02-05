@@ -21,7 +21,7 @@ if sys.argv.count("log") > 0:
     print("logging")
     LOG = True
 
-TIME_STILL_SLEEP = 10.0
+TIME_STILL_SLEEP = 3.0
 
 class Application:
     def __init__(self):
@@ -42,12 +42,11 @@ class Application:
         self.textToDisplay: Dict[str] = {}
 
     def update(self, deltaTime):
-        if self.awake and self.timeTillSleep > 0:
+        if self.timeTillSleep > 0:
             self.timeTillSleep -= deltaTime
-
-        if self.timeTillSleep <= 0:
-            self.setSleep()
-            self.timeTillSleep = 0
+        else:
+            if self.awake:
+                self.toggleScreen()
 
         time.sleep(0.001)
         self.textToDisplay.clear()
@@ -72,27 +71,15 @@ class Application:
     def clearLCD(self):
         self.display.lcd_clear()
 
-    def setSleep(self):
+    def toggleScreen(self):
         if self.awake:
-            print("set sleep")
             self.awake = False
             self.display.lcd_backlight(state=0)
-            if LOG:
-                print("went to sleep")
-            pass
 
-    def setAwake(self):
-        if not self.awake:
-            print("set awake")
-
+        elif not self.awake:
             self.awake = True
             self.display.lcd_backlight(state=1)
-
             self.resetSleepTimer()
-
-            if LOG:
-                print("awoke")
-            pass
 
     def resetSleepTimer(self):
         print("reset sleep timer")
@@ -127,16 +114,14 @@ class Application:
 
     def moveDown(self):
         if not self.awake:
-            self.setAwake()
-            return
+            self.toggleScreen()
 
-        self.resetSleepTimer()
         self.moveCursor(1)
         self.shouldUpdate = True
 
     def moveUp(self):
         if not self.awake:
-            self.setAwake()
+            self.toggleScreen()
             return
 
         self.resetSleepTimer()
@@ -146,7 +131,7 @@ class Application:
 
     def back(self):
         if not self.awake:
-            self.setAwake()
+            self.toggleScreen()
             return
 
         self.resetSleepTimer()
@@ -157,7 +142,7 @@ class Application:
 
     def select(self):
         if not self.awake:
-            self.setAwake()
+            self.toggleScreen()
             return
 
         self.resetSleepTimer()
