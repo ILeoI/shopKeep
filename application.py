@@ -321,5 +321,6 @@ class Application:
         for i in self.textToDisplay:
             print(i + ": " + self.textToDisplay[i])
 
-        if self.timeTillSleep is not 0:
+        if self.timeTillSleep != 0:
             print("TTS: " + str(self.timeTillSleep))
+            print("Awake: " + str(self.awake))
