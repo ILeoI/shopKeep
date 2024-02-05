@@ -15,6 +15,8 @@ if platform.system() == "Windows":
 else:
     import drivers_rpi as drivers
 
+LOG = False
+
 if sys.argv.count("log") > 0:
     print("logging")
     LOG = True
@@ -81,6 +83,9 @@ class Application:
             print("awoke")
         pass
 
+    def resetSleepTimer(self):
+        self.timeTillSleep = TIME_STILL_SLEEP
+
     def fetchResultFromDB(self, sql: str, *args):
         for arg in args:
             sql = sql.replace("%s", arg, 1)
@@ -113,6 +118,7 @@ class Application:
             self.setAwake()
             return
 
+        self.resetSleepTimer()
         self.moveCursor(1)
         self.shouldUpdate = True
 
@@ -121,6 +127,7 @@ class Application:
             self.setAwake()
             return
 
+        self.resetSleepTimer()
         self.moveCursor(0)
         self.shouldUpdate = True
 
@@ -129,6 +136,7 @@ class Application:
             self.setAwake()
             return
 
+        self.resetSleepTimer()
         if len(self.previousPages) > 0:
             self.currentPageIndex = self.previousPages.pop()
             self.shouldUpdate = True
@@ -138,6 +146,7 @@ class Application:
             self.setAwake()
             return
 
+        self.resetSleepTimer()
         currentListElement = self.getCurrentPage().getCurrentListElement()
         if currentListElement.selectable:
             if currentListElement.dataType == "link":
