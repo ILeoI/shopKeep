@@ -133,6 +133,7 @@ class Application:
             return
 
         self.resetSleepTimer()
+
         self.moveCursor(0)
         self.shouldUpdate = True
 
@@ -142,6 +143,7 @@ class Application:
             return
 
         self.resetSleepTimer()
+
         if len(self.previousPages) > 0:
             self.currentPageIndex = self.previousPages.pop()
             self.shouldUpdate = True
@@ -312,3 +314,5 @@ class Application:
     def printState(self):
         for i in self.textToDisplay:
             print(i + ": " + self.textToDisplay[i])
+
+        print("TTS: " + str(self.timeTillSleep))
