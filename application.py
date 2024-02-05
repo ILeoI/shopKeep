@@ -21,7 +21,7 @@ if sys.argv.count("log") > 0:
     print("logging")
     LOG = True
 
-TIME_STILL_SLEEP = 30.0
+TIME_STILL_SLEEP = 10.0
 
 class Application:
     def __init__(self):
