@@ -65,14 +65,15 @@ class Application:
                     self.textToDisplay["Line" + str(i)] = text[i]
                     self.display.lcd_display_string(text[i], i + 2)
 
-            if LOG:
-                self.printState()
+        if LOG:
+            self.printState()
 
     def clearLCD(self):
         self.display.lcd_clear()
 
     def setSleep(self):
         if self.awake:
+            print("set sleep")
             self.awake = False
             self.display.lcd_backlight(state=0)
             if LOG:
@@ -81,6 +82,7 @@ class Application:
 
     def setAwake(self):
         if not self.awake:
+            print("set awake")
             self.awake = True
             self.display.lcd_backlight(state=1)
             self.timeTillSleep = TIME_STILL_SLEEP
