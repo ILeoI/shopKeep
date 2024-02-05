@@ -42,11 +42,12 @@ class Application:
         self.textToDisplay: Dict[str] = {}
 
     def update(self, deltaTime):
-        if self.timeTillSleep < 0:
+        if self.awake and self.timeTillSleep > 0:
+            self.timeTillSleep -= deltaTime
+
+        if self.timeTillSleep <= 0:
             self.setSleep()
             self.timeTillSleep = 0
-        else:
-            self.timeTillSleep -= deltaTime
 
         time.sleep(0.001)
         self.textToDisplay.clear()
