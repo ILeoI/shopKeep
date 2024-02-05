@@ -72,19 +72,21 @@ class Application:
         self.display.lcd_clear()
 
     def setSleep(self):
-        self.awake = False
-        self.display.lcd_backlight(state=0)
-        if LOG:
-            print("went to sleep")
-        pass
+        if self.awake:
+            self.awake = False
+            self.display.lcd_backlight(state=0)
+            if LOG:
+                print("went to sleep")
+            pass
 
     def setAwake(self):
-        self.awake = True
-        self.display.lcd_backlight(state=1)
-        self.timeTillSleep = TIME_STILL_SLEEP
-        if LOG:
-            print("awoke")
-        pass
+        if not self.awake:
+            self.awake = True
+            self.display.lcd_backlight(state=1)
+            self.timeTillSleep = TIME_STILL_SLEEP
+            if LOG:
+                print("awoke")
+            pass
 
     def resetSleepTimer(self):
         self.timeTillSleep = TIME_STILL_SLEEP
