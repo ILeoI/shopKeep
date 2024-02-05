@@ -1,11 +1,25 @@
-from typing import List
+from typing import List, Dict
+
+import platform
+import sys
+import time
 
 import pymysql.cursors
 
 from page import Page
 from list_element import ListElement
 
-TIME_STILL_SLEEP = 30
+if platform.system() == "Windows":
+    WINDOWS = True
+    import drivers_win as drivers
+else:
+    import drivers_rpi as drivers
+
+if sys.argv.count("log") > 0:
+    print("logging")
+    LOG = True
+
+TIME_STILL_SLEEP = 30.0
 
 class Application:
     def __init__(self):
@@ -22,6 +36,45 @@ class Application:
         self.shouldUpdate = True
         self.awake = True
         self.timeTillSleep = TIME_STILL_SLEEP
+        self.display = drivers.Lcd()
+        self.textToDisplay: Dict[str] = {}
+
+    def update(self, deltaTime):
+        if self.timeTillSleep <= 0:
+            self.setSleep()
+            self.timeTillSleep = 0
+        else:
+            self.timeTillSleep -= deltaTime
+
+        time.sleep(0.001)
+        self.textToDisplay.clear()
+
+        if self.shouldUpdate:
+            self.shouldUpdate = False
+            self.display.lcd_clear()
+
+            self.display.lcd_display_string(self.getCurrentPage().title, 1)
+            self.textToDisplay["Title"] = self.getCurrentPage().title
+
+            text = self.getCurrentPage().getTextToDisplay()
+
+            if text is not None:
+                for i in range(0, len(text)):
+                    self.textToDisplay["Line" + str(i)] = text[i]
+                    self.display.lcd_display_string(text[i], i + 2)
+
+    def clearLCD(self):
+        self.display.lcd_clear()
+
+    def setSleep(self):
+        self.awake = False
+        self.display.lcd_backlight(state=0)
+        pass
+
+    def setAwake(self):
+        self.awake = True
+        self.display.lcd_backlight(state=1)
+        pass
 
     def fetchResultFromDB(self, sql: str, *args):
         for arg in args:
@@ -51,19 +104,35 @@ class Application:
         self.shouldUpdate = True
 
     def moveDown(self):
+        if not self.awake:
+            self.setAwake()
+            return
+
         self.moveCursor(1)
         self.shouldUpdate = True
 
     def moveUp(self):
+        if not self.awake:
+            self.setAwake()
+            return
+
         self.moveCursor(0)
         self.shouldUpdate = True
 
     def back(self):
+        if not self.awake:
+            self.setAwake()
+            return
+
         if len(self.previousPages) > 0:
             self.currentPageIndex = self.previousPages.pop()
             self.shouldUpdate = True
 
     def select(self):
+        if not self.awake:
+            self.setAwake()
+            return
+
         currentListElement = self.getCurrentPage().getCurrentListElement()
         if currentListElement.selectable:
             if currentListElement.dataType == "link":
@@ -222,11 +291,5 @@ class Application:
         return next_buyer["name"]
 
     def printState(self):
-        print("currentPageIndex: " + str(self.currentPageIndex))
-        print("prevPages: " + str(self.previousPages))
-        for page in self.pages:
-            print(page.title + ": " + str(len(page.elements)))
-            print(page.id)
-            for element in page.elements:
-                print(element.displayText)
-            print()
+        for i in self.textToDisplay:
+            print(i + ": " + self.textToDisplay[i])
