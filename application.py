@@ -42,7 +42,7 @@ class Application:
         self.textToDisplay: Dict[str] = {}
 
     def update(self, deltaTime):
-        if self.timeTillSleep <= 0:
+        if self.timeTillSleep < 0:
             self.setSleep()
             self.timeTillSleep = 0
         else:
@@ -83,9 +83,12 @@ class Application:
     def setAwake(self):
         if not self.awake:
             print("set awake")
+
             self.awake = True
             self.display.lcd_backlight(state=1)
-            self.timeTillSleep = TIME_STILL_SLEEP
+
+            self.resetSleepTimer()
+
             if LOG:
                 print("awoke")
             pass
@@ -317,4 +320,5 @@ class Application:
         for i in self.textToDisplay:
             print(i + ": " + self.textToDisplay[i])
 
-        print("TTS: " + str(self.timeTillSleep))
+        if self.timeTillSleep is not 0:
+            print("TTS: " + str(self.timeTillSleep))
