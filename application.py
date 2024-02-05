@@ -95,6 +95,7 @@ class Application:
             pass
 
     def resetSleepTimer(self):
+        print("reset sleep timer")
         self.timeTillSleep = TIME_STILL_SLEEP
 
     def fetchResultFromDB(self, sql: str, *args):
