@@ -40,6 +40,12 @@ class Page:
         return self.elements[self.currentElementIndex]
 
     def getTextToDisplay(self):
+        if len(self.elements) == 0:
+            return (
+                "None",
+                "", 
+                "",
+            )
         if len(self.elements) >= 3:
             # If at first, show first three
             if self.currentElementIndex == 0:

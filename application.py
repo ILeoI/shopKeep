@@ -115,27 +115,28 @@ class Application:
 
     def moveDown(self):
         if not self.awake:
+            self.resetSleepTimer()
             self.toggleScreen()
+            return
 
         self.moveCursor(1)
         self.shouldUpdate = True
 
     def moveUp(self):
         if not self.awake:
+            self.resetSleepTimer()
             self.toggleScreen()
             return
 
         self.resetSleepTimer()
-
         self.moveCursor(0)
         self.shouldUpdate = True
 
     def back(self):
         if not self.awake:
+            self.resetSleepTimer()
             self.toggleScreen()
             return
-
-        self.resetSleepTimer()
 
         if len(self.previousPages) > 0:
             self.currentPageIndex = self.previousPages.pop()
@@ -143,10 +144,10 @@ class Application:
 
     def select(self):
         if not self.awake:
+            self.resetSleepTimer()
             self.toggleScreen()
             return
 
-        self.resetSleepTimer()
         currentListElement = self.getCurrentPage().getCurrentListElement()
         if currentListElement.selectable:
             if currentListElement.dataType == "link":
@@ -308,6 +309,6 @@ class Application:
         for i in self.textToDisplay:
             print(i + ": " + self.textToDisplay[i])
 
-        if self.timeTillSleep != 0:
+        if self.timeTillSleep >= 0:
             print("TTS: " + str(self.timeTillSleep))
             print("Awake: " + str(self.awake))

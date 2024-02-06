@@ -12,7 +12,7 @@ if __name__ == '__main__':
 
     i = 0
 
-    while 1:
+    while i < 4:
         try:
             display.lcd_display_string("Tom Stinks", (i % 4) + 1)
             time.sleep(0.5)
