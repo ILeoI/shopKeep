@@ -111,9 +111,6 @@ class Application:
             cursor.execute(sql)
         self.connection.commit()
 
-    def addPage(self, page: Page):
-        self.pages.append(page)
-
     def getCurrentPage(self):
         return self.pages[self.currentPageIndex]
 
@@ -166,7 +163,7 @@ class Application:
                             page.currentElementIndex = 0
                             self.previousPages.append(self.currentPageIndex)
                             self.currentPageIndex = i
-            if currentListElement.dataType == "add":
+            if currentListElement.dataType == "addPurchase":
                 (userID, groceryID) = currentListElement.data
                 self.runSQLOnDB("INSERT INTO PurchaseHistory(userID, groceryID, purchaseDate) VALUES(%s, %s, now())",
                                 userID, groceryID
@@ -227,7 +224,7 @@ class Application:
         self.pages.append(page)
 
     def genGroceryAddPage(self, groceryName: str, groceryID: str):
-        page = Page(title=groceryName, id="add" + groceryID)
+        page = Page(title=groceryName, id="addPurchase" + groceryID)
 
         results = self.fetchResultFromDB(
             "SELECT Users.name, Users.userID, Groceries.groceryID "
@@ -242,7 +239,7 @@ class Application:
             page.addElement(
                 ListElement(result["name"],
                             selectable=True,
-                            dataType="add",
+                            dataType="addPurchase",
                             data=(result["userID"], result["groceryID"])
                             )
             )
@@ -264,7 +261,7 @@ class Application:
 
         optionPage.addElement(ListElement("Next Buyer: " + self.findNextBuyer(groceryID)))
 
-        optionPage.addElement(ListElement("Add Purchase", selectable=True, dataType="link", data="add" + groceryID))
+        optionPage.addElement(ListElement("Add Purchase", selectable=True, dataType="link", data="addPurchase" + groceryID))
         optionPage.addElement(ListElement("History", selectable=True, dataType="link", data="history" + groceryID))
 
     def genGroceryOptionPage(self, groceryName: str, groceryID: str):
@@ -272,7 +269,7 @@ class Application:
 
         page.addElement(ListElement("Next Buyer: " + self.findNextBuyer(groceryID), selectable=True, dataType="link", data="buyers" + groceryID))
 
-        page.addElement(ListElement("Add Purchase", selectable=True, dataType="link", data="add" + groceryID))
+        page.addElement(ListElement("Add Purchase", selectable=True, dataType="link", data="addPurchase" + groceryID))
         page.addElement(ListElement("History", selectable=True, dataType="link", data="history" + groceryID))
 
         self.pages.append(page)
