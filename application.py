@@ -38,15 +38,17 @@ class Application:
         self.shouldUpdate = True
         self.awake = True
         self.timeTillSleep = TIME_STILL_SLEEP
+        self.doSleep = False
         self.display = drivers.Lcd()
         self.textToDisplay: Dict[str] = {}
 
     def update(self, deltaTime):
-        if self.timeTillSleep > 0:
-            self.timeTillSleep -= deltaTime
-        else:
-            if self.awake:
-                self.toggleScreen()
+        if self.doSleep:
+            if self.timeTillSleep > 0:
+                self.timeTillSleep -= deltaTime
+            else:
+                if self.awake:
+                    self.toggleScreen()
 
         time.sleep(0.001)
         self.textToDisplay.clear()
@@ -263,14 +265,14 @@ class Application:
     def genGroceryOptionPage(self, groceryName: str, groceryID: str):
         page = Page(title=groceryName, id="option" + groceryID)
 
-        page.addElement(ListElement("Next Buyer: " + self.findNextBuyer(groceryID)))
+        page.addElement(ListElement("Next Buyer: " + self.findNextBuyer(groceryID), selectable=True, dataType="link", data="buyers" + groceryID))
 
-        page.addElement(ListElement("Add Purhcase", selectable=True, dataType="link", data="add" + groceryID))
+        page.addElement(ListElement("Add Purchase", selectable=True, dataType="link", data="add" + groceryID))
         page.addElement(ListElement("History", selectable=True, dataType="link", data="history" + groceryID))
 
         self.pages.append(page)
 
-    def genGroceriesPage(self):
+    def genAppPages(self):
         results = self.fetchResultFromDB("SELECT * FROM Groceries")
 
         groceryPage = Page(id="groceryList", title="Groceries")
@@ -282,12 +284,31 @@ class Application:
             groceryID = str(result["groceryID"])
 
             self.genGroceryOptionPage(groceryName, groceryID)
+            self.genGroceryBuyersPage(groceryID)
             self.genGroceryHistoryPage(groceryName, groceryID)
             self.genGroceryAddPage(groceryName, groceryID)
 
             groceryPage.addElement(
                 ListElement(displayText=groceryName, selectable=True, dataType="link", data="option" + groceryID)
             )
+
+    def genGroceryBuyersPage(self, groceryID: str):
+        page = Page(title="Buyers", id="buyers" + groceryID)
+
+        results = self.fetchResultFromDB(
+            "SELECT Users.name "
+            "FROM Sharing "
+            "JOIN Users on Sharing.userID = Users.userID "
+            "WHERE Sharing.groceryID = %s ",
+            groceryID
+        )
+
+        for result in results:
+            page.addElement(
+                ListElement(displayText=result["name"])
+            )
+
+        self.pages.append(page)
 
     def findNextBuyer(self, groceryID: str):
         results = self.fetchResultFromDB(

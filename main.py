@@ -19,8 +19,11 @@ UP_BUTTON = 18
 if __name__ == '__main__':
     app = Application()
 
-    app.genGroceriesPage()
+    # Generate all the pages
+    app.genAppPages()
 
+
+    # Assigning functions to button presses
     if not CONSOLE_MODE:
         selectButton = Button(SELECT_BUTTON)
         selectButton.when_released = app.select
@@ -34,8 +37,11 @@ if __name__ == '__main__':
         upButton = Button(UP_BUTTON)
         upButton.when_released = app.moveUp
 
+        app.doSleep = True
+
     lastTime = time.time()
 
+    # App Update Loop
     while 1:
         currentTime = time.time()
         deltaTime = (currentTime - lastTime)
