@@ -257,7 +257,7 @@ class Application:
 
         optionPage.addElement(ListElement("Next Buyer: " + self.findNextBuyer(groceryID)))
 
-        optionPage.addElement(ListElement("Add", selectable=True, dataType="link", data="add" + groceryID))
+        optionPage.addElement(ListElement("Add Purchase", selectable=True, dataType="link", data="add" + groceryID))
         optionPage.addElement(ListElement("History", selectable=True, dataType="link", data="history" + groceryID))
 
     def genGroceryOptionPage(self, groceryName: str, groceryID: str):
@@ -265,7 +265,7 @@ class Application:
 
         page.addElement(ListElement("Next Buyer: " + self.findNextBuyer(groceryID)))
 
-        page.addElement(ListElement("Add", selectable=True, dataType="link", data="add" + groceryID))
+        page.addElement(ListElement("Add Purhcase", selectable=True, dataType="link", data="add" + groceryID))
         page.addElement(ListElement("History", selectable=True, dataType="link", data="history" + groceryID))
 
         self.pages.append(page)

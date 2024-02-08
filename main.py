@@ -40,9 +40,9 @@ if __name__ == '__main__':
         currentTime = time.time()
         deltaTime = (currentTime - lastTime)
 
-        app.update(deltaTime)
-
         try:
+            app.update(deltaTime)
+
             if CONSOLE_MODE:
                 i = input("Input: ")
                 if i == "X":
@@ -60,6 +60,7 @@ if __name__ == '__main__':
         except KeyboardInterrupt:
             print("")
             print("Stopped")
+            app.clearLCD()
             break
 
         lastTime = currentTime
