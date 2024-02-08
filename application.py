@@ -25,6 +25,7 @@ if sys.argv.count("debug") > 0:
 if sys.argv.count("debug-h") > 0:
     print("Debug High")
     DEBUG_HIGH = True
+    DEBUG_LOW = True
 
 TIME_STILL_SLEEP = 30.0
 
