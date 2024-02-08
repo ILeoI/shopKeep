@@ -73,8 +73,8 @@ class Application:
                     self.textToDisplay["Line" + str(i)] = text[i]
                     self.display.lcd_display_string(text[i], i + 2)
 
-        if DEBUG_LOW:
-            self.printState()
+            if DEBUG_LOW:
+                self.printState()
 
     def clearLCD(self):
         self.display.lcd_clear()

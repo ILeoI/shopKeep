@@ -8,7 +8,7 @@ WINDOWS = False
 CONSOLE_MODE = True
 
 if sys.argv.count("gpio") > 0:
-    print("gpio input")
+    print("GPIO Input")
     CONSOLE_MODE = False
 
 SELECT_BUTTON = 24
