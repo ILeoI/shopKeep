@@ -50,6 +50,8 @@ if __name__ == '__main__':
             app.update(deltaTime)
 
             if CONSOLE_MODE:
+                app.printState(consoleMode=True)
+
                 i = input("Input: ")
                 if i == "X":
                     app.clearLCD()

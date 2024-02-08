@@ -15,11 +15,16 @@ if platform.system() == "Windows":
 else:
     import drivers_rpi as drivers
 
-LOG = False
+DEBUG_LOW = False
+DEBUG_HIGH = False
 
-if sys.argv.count("log") > 0:
-    print("logging")
-    LOG = True
+if sys.argv.count("debug") > 0:
+    print("Debug Low")
+    DEBUG_LOW = True
+
+if sys.argv.count("debug-h") > 0:
+    print("Debug High")
+    DEBUG_HIGH = True
 
 TIME_STILL_SLEEP = 30.0
 
@@ -67,7 +72,7 @@ class Application:
                     self.textToDisplay["Line" + str(i)] = text[i]
                     self.display.lcd_display_string(text[i], i + 2)
 
-        if LOG:
+        if DEBUG_LOW:
             self.printState()
 
     def clearLCD(self):
@@ -84,7 +89,7 @@ class Application:
             self.resetSleepTimer()
 
     def resetSleepTimer(self):
-        if LOG:
+        if DEBUG_LOW:
             print("reset sleep timer")
         self.timeTillSleep = TIME_STILL_SLEEP
 
@@ -326,10 +331,24 @@ class Application:
 
         return next_buyer["name"]
 
-    def printState(self):
-        for i in self.textToDisplay:
-            print(i + ": " + self.textToDisplay[i])
+    def printState(self, consoleMode: bool = False):
+        if DEBUG_LOW or consoleMode:
+            for i in self.textToDisplay:
+                print(i + ": " + self.textToDisplay[i])
 
-        if self.timeTillSleep >= 0:
+        if DEBUG_HIGH:
+            for element in self.getCurrentPage().elements:
+                print("Element " + str(self.getCurrentPage().elements.index(element)) + ": ")
+                print("    Text: " + element.displayText)
+                print("    Selectable: " + str(element.selectable))
+                if element.selectable:
+                    print("    Type: " + element.dataType)
+                    if isinstance(element.data, tuple) or isinstance(element.data, list):
+                        for data in element.data:
+                            print("        Data: " + str(data))
+                    else:
+                        print("        Data: " + str(element.data))
+
+        if self.timeTillSleep >= 0 and self.doSleep:
             print("TTS: " + str(self.timeTillSleep))
             print("Awake: " + str(self.awake))
