@@ -122,8 +122,8 @@ class Application:
         self.shouldUpdate = True
 
     def moveDown(self):
+        self.resetSleepTimer()
         if not self.awake:
-            self.resetSleepTimer()
             self.toggleScreen()
             return
 
@@ -131,18 +131,17 @@ class Application:
         self.shouldUpdate = True
 
     def moveUp(self):
+        self.resetSleepTimer()
         if not self.awake:
-            self.resetSleepTimer()
             self.toggleScreen()
             return
 
-        self.resetSleepTimer()
         self.moveCursor(0)
         self.shouldUpdate = True
 
     def back(self):
+        self.resetSleepTimer()
         if not self.awake:
-            self.resetSleepTimer()
             self.toggleScreen()
             return
 
@@ -151,8 +150,8 @@ class Application:
             self.shouldUpdate = True
 
     def select(self):
+        self.resetSleepTimer()
         if not self.awake:
-            self.resetSleepTimer()
             self.toggleScreen()
             return
 
