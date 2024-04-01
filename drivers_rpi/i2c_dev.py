@@ -1,3 +1,5 @@
+# From https://github.com/the-raspberry-pi-guy/lcd/blob/master/drivers/i2c_dev.py
+
 from smbus import SMBus
 from RPi.GPIO import RPI_REVISION
 from time import sleep
