@@ -1,9 +1,0 @@
-application.py
-drivers_rpi
-drivers_win
-genDatabase.sql
-list_element.py
-main.py
-page.py
-__pycache__
-README.md
