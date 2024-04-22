@@ -1,6 +1,6 @@
 # ShopKeep
-<img src="resources/screen off.jpg" width=45%>
-<img src="resources/screen on.jpg" width=45%>
+<img src="resources/screen off.jpg" width=30%/>
+<img src="resources/screen on.jpg" width=30%/>
 <br>
 <p>A solution to keep track on whose turn it is to purchase shared household goods</p>
 
